@@ -14,14 +14,14 @@ cd './MDat' % Directory where matrix is stored
 if isfile(fcheck) % File exists
     U = matfile(fcheck);
     U=U.U; % I think this step may be redundent 
-    'file exists'
+    'Matrix file exists'
 else % File does not exist
     cd(parent_d) % Go back to current directory to construct matrix
     U=zeros(N,N); % Initialise Flouqet matrix
     [U,time1]=UMatrix(U,N,N_1,K_class,T,gamma); % Construct Flouqet matrix
     cd './MDat' % Directory where matrix is stored
     save(fcheck,'U'); % save it 
-    'file created'
+    'Matrix file created'
 end
 cd(parent_d)
 end

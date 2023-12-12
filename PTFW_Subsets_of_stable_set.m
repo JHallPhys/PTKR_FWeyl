@@ -9,7 +9,7 @@ K_class =5; % Classical Kicking
 gamma = complex(0,0.001); % PT-strength 
 Nmin=200;
 dN=200;
-Nmax=400;
+Nmax=1000;
 N_i=Nmin:dN:Nmax;
 NLen=length(N_i);
 str_ext='.mat'; % File extension
@@ -27,7 +27,7 @@ for itt=1:NLen
     % Schur Parameter
     eps=exp(imag(gamma)*T);% Tolerance parameter for stability classification
     U=UCheck(N,N_1,K_class,T,gamma,str_ext);% Check if matrix exists, if it does load it, else make and save it
-    [psi,En] = schur(U); % psi are the Schur eigenfns and En matrix of eigs
+    [psi,En]=ECheck(U,N,N_1,K_class,T,gamma,str_ext);% Check if matrix exists, if it does load it, else make and save it
     [psiS,Es]=REig(En,psi,N,set_efn) ;   % Reorder efn/values
     Es=diag(Es); 
     [psi_2,n_efn]=Psi_lifetime(psiS,Es,eps,set_stability);
@@ -49,7 +49,16 @@ save(fname1,'FWData');
 cd(parent_d)
 
 
+coeff = polyfit(log10(2*N_i+1),log10(pint), 1);
+dfit = polyval(coeff , log10(2*N_i+1));
+
+
 figure
+hold on
 plot(log10(2*N_i+1),log10(pint),'k.-','Markersize',10)
+plot(log10(2*N_i+1),dfit,'r.-','Markersize',10)
 xlabel('N')
 ylabel('pint(\mu)')
+FWDimension=coeff(1)
+
+
